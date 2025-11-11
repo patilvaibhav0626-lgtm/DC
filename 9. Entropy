@@ -83,6 +83,13 @@ xlabel("Probability p(x)");
 ylabel("Entropy H(x)");
 
 
+
+
+
+
+
+
+Output
 Enter P(xi) = 0.5
 Enter P(xi) = 0.5
 Enter P(yj/xi) = 0.6
