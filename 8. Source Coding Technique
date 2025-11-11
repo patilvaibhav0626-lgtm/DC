@@ -1,0 +1,28 @@
+clc;
+clear all;
+close all;
+
+symbols = input('Enter the symbols: ');
+prob = input('Enter the Probabilities: ');
+[dict, avglen] = huffmandict(symbols, prob);
+temp = dict;
+for i = 1:length(temp)
+    temp{i,2} = num2str(temp{i,2});
+end
+disp('Huffman Dictionary:');
+disp(temp);
+
+actualsig = randsrc(100, 1, [symbols; prob]);
+encoded = huffmanenco(actualsig, dict);
+decoded = huffmandeco(encoded, dict);
+
+disp('ENCODED Huffman code:');
+disp(encoded);
+disp('DECODED Huffman code:');
+disp(decoded);
+
+
+
+
+Enter the symbols:[1 2 3 4 5]
+Enter the Probabilities:[0.4 0.2 0.2 0.1 0.1]
