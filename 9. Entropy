@@ -89,7 +89,10 @@ ylabel("Entropy H(x)");
 
 
 
-Output
+
+
+
+Output Values:-
 Enter P(xi) = 0.5
 Enter P(xi) = 0.5
 Enter P(yj/xi) = 0.6
