@@ -1,0 +1,52 @@
+
+clc;
+clear;
+close all;
+
+%% Parameters
+M = 16;                     % M-ary QAM (change M = 4, 8, 16, 64 as needed)
+k = log2(M);                % Bits per symbol
+numSymbols = 1e5;           % Number of symbols to transmit
+EbNo = 0:2:20;              % Eb/No range in dB
+
+%% Transmitter
+data = randi([0 M-1], numSymbols, 1); % Random symbols
+txSig = qammod(data, M, 'UnitAveragePower', true); % QAM Modulation
+
+%% Channel and Receiver
+ber = zeros(size(EbNo));
+
+for i = 1:length(EbNo)
+    % Add AWGN noise
+    rxSig = awgn(txSig, EbNo(i) + 10*log10(k), 'measured');
+    
+    % Demodulate
+    rxData = qamdemod(rxSig, M, 'UnitAveragePower', true);
+    
+    % Calculate BER
+    [numErr, ber(i)] = biterr(data, rxData, log2(M));
+end
+
+%% Plot BER vs Eb/No
+figure;
+semilogy(EbNo, ber, '-o', 'LineWidth', 1.5);
+grid on;
+xlabel('Eb/No (dB)');
+ylabel('Bit Error Rate (BER)');
+title(['BER Performance of ', num2str(M), '-QAM']);
+legend([num2str(M), '-QAM']);
+
+%% Constellation diagram (with and without noise)
+SNR = 10; % Example SNR
+rxSig_noisy = awgn(txSig, SNR, 'measured');
+
+figure;
+subplot(1,2,1);
+plot(real(txSig), imag(txSig), 'b.');
+title(['Constellation of ', num2str(M), '-QAM (No Noise)']);
+xlabel('In-phase'); ylabel('Quadrature'); grid on; axis square;
+
+subplot(1,2,2);
+plot(real(rxSig_noisy), imag(rxSig_noisy), 'r.');
+title(['Constellation of ', num2str(M), '-QAM (With Noise, SNR=', num2str(SNR), ' dB)']);
+xlabel('In-phase'); ylabel('Quadrature'); grid on; axis square;
